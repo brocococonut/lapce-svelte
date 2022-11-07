@@ -1,17 +1,17 @@
-name = "<plugin-name>"
-version = "0.0.0"
-author = "<your name>"
-display-name = "<plugin-display-name>"
-description = "<plugin-description>"
-wasm = "bin/<plugin-name>.wasm"
+name = "lapce-prisma"
+version = "0.1.0"
+author = "tingfeng"
+display-name = "prisma"
+description = "prisma plugin for lapce"
+wasm = "bin/lapce-prisma.wasm"
 
 [activation]
-language = []
-workspace-contains = []
+language = ["Plain Text"]
+workspace-contains = ["*/*.prisma"]
 
 [config."volt.serverPath"]
 default = ""
-description = "Path to custom LSP executable"
+description = "Path to prisma LSP executable"
 
 # [config."volt.serverArgs"]
 # default = []

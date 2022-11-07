@@ -1,0 +1,74 @@
+datasource db {
+    // provider = "sqlite"
+    // url      = "file:dev.db"
+    // provider = "mysql"
+    // url      = "mysql://root:root123456@127.0.0.1:3306/dev"
+    provider = "postgresql"
+    url      = "postgresql://postgres:postgres@localhost:5432/tg?schema=public&connection_limit=5"
+}
+
+generator client {
+    provider        = "cargo prisma"
+    output          = "../services/src/telegram/models.rs"
+    previewFeatures = ["interactiveTransactions", "referentialIntegrity"]
+}
+
+model Account {
+    id             BigInt             @id @default(autoincrement())
+    apiId          Int
+    apiHash        String
+    proxyUrl       String
+    session        String             @unique
+    phone          String             @unique
+    local_address  String
+    remote_address String
+    status         Int                @default(1) @db.SmallInt
+    isOnline       Int                @default(0) @db.SmallInt
+    createdTime    DateTime
+    updatedTime    DateTime?
+    lastLoginTime  DateTime?
+    AccountChat    AccountChatBytes[]
+
+    @@map("tg_account")
+}
+
+model AccountChatBytes {
+    id          BigInt    @id @default(autoincrement())
+    account     Account   @relation(fields: [accountId], references: [id])
+    accountId   BigInt
+    chatType    Int       @default(1) @db.SmallInt
+    chatId      BigInt
+    chat        Chat      @relation(fields: [chatId], references: [chatId])
+    chatBytes   String
+    createdTime DateTime
+    updatedTime DateTime?
+
+    @@index([accountId, chatId, chatType])
+    @@map("tg_account_chat_bytes")
+}
+
+model ChatHistoryUser {
+    id     BigInt @id @default(autoincrement())
+    chatId BigInt
+    userId BigInt
+
+    @@index([chatId, userId])
+    @@map("tg_chat_history_user")
+}
+
+model Chat {
+    id               BigInt             @id @default(autoincrement())
+    chatId           BigInt             @unique
+    chatType         Int                @default(1) @db.SmallInt
+    title            String
+    username         String?
+    about            String?
+    members_count    Int                @default(0)
+    status           Int                @default(1) @db.SmallInt
+    AccountChatBytes AccountChatBytes[]
+
+    @@index([chatType, status])
+    
+    
+    @@map("tg_chat")
+}
