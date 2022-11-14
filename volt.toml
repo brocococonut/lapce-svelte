@@ -1,6 +1,6 @@
 author = "tingfeng-key"
-description = "prisma plugin for lapce"
-display-name = "prisma"
+description = "Prisma plugin for lapce"
+display-name = "Prisma"
 icon = "logo.png"
 name = "lapce-prisma"
 version = "0.1.0"

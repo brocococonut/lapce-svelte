@@ -32,11 +32,8 @@ macro_rules! ok {
 
 fn initialize(params: InitializeParams) -> Result<()> {
     let document_selector: DocumentSelector = vec![DocumentFilter {
-        // lsp language id
         language: Some(string!("prisma")),
-        // glob pattern
-        pattern: Some(string!("**/*.prisma")),
-        // like file:
+        pattern: None,
         scheme: None,
     }];
     let mut server_args = vec![String::from("--stdio")];
@@ -73,9 +70,8 @@ fn initialize(params: InitializeParams) -> Result<()> {
         }
     }
 
-    // Plugin working directory
     let server_uri = ok!(Url::parse("urn:prisma-language-server"));
-    PLUGIN_RPC.stderr(&format!("plugin returned with error: {}", server_uri));
+    
     PLUGIN_RPC.start_lsp(
         server_uri,
         server_args,
@@ -93,7 +89,7 @@ impl LapcePlugin for State {
             |Initialize::METHOD => {
                 let params: InitializeParams = serde_json::from_value(params).unwrap();
                 if let Err(e) = initialize(params) {
-                    PLUGIN_RPC.stderr(&format!("plugin returned with error: {e}"))
+                    PLUGIN_RPC.stderr(&format!("Prisma plugin init error: {e}"))
                 }
             }
             |_ => {}
