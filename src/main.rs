@@ -89,7 +89,7 @@ impl LapcePlugin for State {
             |Initialize::METHOD => {
                 let params: InitializeParams = serde_json::from_value(params).unwrap();
                 if let Err(e) = initialize(params) {
-                    PLUGIN_RPC.stderr(&format!("Prisma plugin init error: {e}"))
+                    PLUGIN_RPC.stderr(&format!("Prisma plugin init error: {e}"));
                 }
             }
             |_ => {}
