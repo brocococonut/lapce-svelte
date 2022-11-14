@@ -1,9 +1,10 @@
+author = "tingfeng-key"
+description = "prisma plugin for lapce"
+display-name = "prisma"
+icon = "logo.png"
 name = "lapce-prisma"
 version = "0.1.0"
-author = "tingfeng-key"
-display-name = "prisma"
-description = "prisma plugin for lapce"
-wasm = "lapce-prisma.wasm"
+wasm = "bin/lapce-prisma.wasm"
 
 [activation]
 language = ["prisma"]
