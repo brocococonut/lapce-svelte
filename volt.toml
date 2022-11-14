@@ -3,6 +3,7 @@ description = "Prisma plugin for lapce"
 display-name = "Prisma"
 icon = "logo.png"
 name = "lapce-prisma"
+repository = "https://github.com/tingfeng-key/lapce-prisma"
 version = "0.1.0"
 wasm = "bin/lapce-prisma.wasm"
 
