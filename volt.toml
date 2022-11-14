@@ -1,30 +1,14 @@
 name = "lapce-prisma"
 version = "0.1.0"
-author = "tingfeng"
+author = "tingfeng-key"
 display-name = "prisma"
 description = "prisma plugin for lapce"
-wasm = "bin/lapce-prisma.wasm"
+wasm = "lapce-prisma.wasm"
 
 [activation]
-language = ["Plain Text"]
+language = ["prisma"]
 workspace-contains = ["*/*.prisma"]
 
 [config."volt.serverPath"]
 default = ""
 description = "Path to prisma LSP executable"
-
-# [config."volt.serverArgs"]
-# default = []
-# description = ""
-
-# [config."lspSettingArray"]
-# default = []
-# description = ""
-
-# [config."lspSettingString"]
-# default = ""
-# description = ""
-
-# [config."lspSettingBool"]
-# default = false
-# description = ""

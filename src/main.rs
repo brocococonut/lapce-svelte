@@ -1,13 +1,12 @@
-use anyhow::Result;
+use anyhow::{anyhow,Result};
 use lapce_plugin::{
     psp_types::{
         lsp_types::{
-            request::Initialize, DocumentFilter, DocumentSelector, InitializeParams, MessageType,
-            Url,
+            request::Initialize, DocumentFilter, DocumentSelector, InitializeParams,Url,
         },
         Request,
     },
-    register_plugin, LapcePlugin, VoltEnvironment, PLUGIN_RPC,
+    register_plugin, LapcePlugin, PLUGIN_RPC,
 };
 use serde_json::Value;
 
@@ -16,19 +15,34 @@ struct State {}
 
 register_plugin!(State);
 
+macro_rules! string {
+  ( $x:expr ) => {
+    String::from($x)
+  };
+}
+
+macro_rules! ok {
+  ( $x:expr ) => {
+    match ($x) {
+      | Ok(v) => v,
+      | Err(e) => return Err(anyhow!(e)),
+    }
+  };
+}
+
 fn initialize(params: InitializeParams) -> Result<()> {
     let document_selector: DocumentSelector = vec![DocumentFilter {
         // lsp language id
-        language: Some(String::from("Plain Text")),
+        language: Some(string!("prisma")),
         // glob pattern
-        pattern: Some(String::from("**/*.prisma")),
+        pattern: Some(string!("**/*.prisma")),
         // like file:
         scheme: None,
     }];
-    let mut server_args = vec![];
+    let mut server_args = vec![String::from("--stdio")];
 
     if let Some(options) = params.initialization_options.as_ref() {
-        if let Some(lsp) = options.get("lsp") {
+        if let Some(lsp) = options.get("volt") {
             if let Some(args) = lsp.get("serverArgs") {
                 if let Some(args) = args.as_array() {
                     if !args.is_empty() {
@@ -59,17 +73,9 @@ fn initialize(params: InitializeParams) -> Result<()> {
         }
     }
 
-    let volt_uri = match VoltEnvironment::operating_system().as_deref() {
-        Ok("windows") => {
-            format!("urn:prisma-language-server.cmd")
-        }
-        _ => "urn:prisma-language-server".to_string(),
-    };
-
     // Plugin working directory
-    let server_uri = Url::parse(&volt_uri)?;
-
-    PLUGIN_RPC.window_show_message(MessageType::ERROR, format!("{}", server_uri.clone()));
+    let server_uri = ok!(Url::parse("urn:prisma-language-server"));
+    PLUGIN_RPC.stderr(&format!("plugin returned with error: {}", server_uri));
     PLUGIN_RPC.start_lsp(
         server_uri,
         server_args,
@@ -84,17 +90,13 @@ impl LapcePlugin for State {
     fn handle_request(&mut self, _id: u64, method: String, params: Value) {
         #[allow(clippy::single_match)]
         match method.as_str() {
-            Initialize::METHOD => {
+            |Initialize::METHOD => {
                 let params: InitializeParams = serde_json::from_value(params).unwrap();
-                PLUGIN_RPC.window_show_message(MessageType::ERROR, format!("111"));
                 if let Err(e) = initialize(params) {
-                    PLUGIN_RPC.window_show_message(
-                        MessageType::ERROR,
-                        format!("plugin returned with error: {e}"),
-                    )
+                    PLUGIN_RPC.stderr(&format!("plugin returned with error: {e}"))
                 }
             }
-            _ => {}
+            |_ => {}
         }
     }
 }
