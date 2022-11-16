@@ -1,10 +1,10 @@
-# Lapce plugin for prisma (`prisma-language-server`)
+# Lapce plugin for svelte (`svelte-language-server`)
 
 ## Prerequisites
 
-Install `prisma-language-server` (Requires NodeJS) via `npm` or your system package manager  
+Install `svelte-language-server` (Requires NodeJS) via `npm` or your system package manager  
 Server needs to be in one of the paths included in `PATH` environment variable
 
 ```shell
-npm install -g @prisma/language-server
+npm install -g svelte-language-server
 ```

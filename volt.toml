@@ -1,16 +1,16 @@
 author = "tingfeng-key"
-description = "Prisma plugin for lapce"
-display-name = "Prisma"
+description = "Svelte plugin for lapce"
+display-name = "Svelte"
 icon = "logo.png"
-name = "lapce-prisma"
-repository = "https://github.com/tingfeng-key/lapce-prisma"
+name = "lapce-svelte"
+repository = "https://github.com/brocococonut/lapce-svelte"
 version = "0.1.0"
-wasm = "bin/lapce-prisma.wasm"
+wasm = "bin/lapce-svelte.wasm"
 
 [activation]
-language = ["prisma"]
-workspace-contains = ["*/*.prisma"]
+language = ["svelte"]
+workspace-contains = ["*/*.svelte"]
 
 [config."volt.serverPath"]
 default = ""
-description = "Path to prisma LSP executable"
+description = "Path to svelte LSP executable"

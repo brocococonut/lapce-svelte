@@ -32,7 +32,7 @@ macro_rules! ok {
 
 fn initialize(params: InitializeParams) -> Result<()> {
     let document_selector: DocumentSelector = vec![DocumentFilter {
-        language: Some(string!("prisma")),
+        language: Some(string!("svelte")),
         pattern: None,
         scheme: None,
     }];
@@ -70,7 +70,7 @@ fn initialize(params: InitializeParams) -> Result<()> {
         }
     }
 
-    let server_uri = ok!(Url::parse("urn:prisma-language-server"));
+    let server_uri = ok!(Url::parse("urn:svelte-language-server"));
     
     PLUGIN_RPC.start_lsp(
         server_uri,
@@ -89,7 +89,7 @@ impl LapcePlugin for State {
             |Initialize::METHOD => {
                 let params: InitializeParams = serde_json::from_value(params).unwrap();
                 if let Err(e) = initialize(params) {
-                    PLUGIN_RPC.stderr(&format!("Prisma plugin init error: {e}"));
+                    PLUGIN_RPC.stderr(&format!("Svelte plugin init error: {e}"));
                 }
             }
             |_ => {}
